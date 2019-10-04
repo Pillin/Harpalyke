@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const controller = require("../controllers/divide");
 
-router.post("/", (req, res) => {});
+router.post("/", controller.getAndSolveResult);
 
 module.exports = router;
