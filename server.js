@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -8,10 +9,18 @@ const dotenv = require("dotenv");
 const routes = require("./routes");
 const databaseConfig = require("./config/database");
 
-app.use(pino);
+const { PORT, NODE_ENV } = process.env;
+if (NODE_ENV !== "test") {
+  app.use(pino);
+} else {
+  logger.info = data => data;
+}
+
 dotenv.config();
 databaseConfig(logger);
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/", routes);
-app.listen(3000, () => logger.info("server started"));
+const server = app.listen(PORT, () => logger.info("server started"));
+module.exports = { app, server };

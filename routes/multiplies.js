@@ -1,8 +1,9 @@
 const express = require("express");
+const controller = require("../controllers/multiply");
+const { validateParams } = require("../middlewares/params");
 
 const router = express.Router();
-const controller = require("../controllers/multiply");
 
-router.post("/", controller.getAndSolveResult);
+router.post("/", validateParams, controller.getAndSolveResult);
 
 module.exports = router;
