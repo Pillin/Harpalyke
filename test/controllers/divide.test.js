@@ -23,7 +23,7 @@ describe(`POST ${URL}`, () => {
       });
   });
 
-  it("it shoud return status code 400 if we dosent send anything", done => {
+  it("it shoud return status code 400 if we doesn't send anything", done => {
     request(app)
       .post(URL)
       .set("Accept", "application/json")
@@ -34,9 +34,31 @@ describe(`POST ${URL}`, () => {
         assert.exists(res.body);
 
         assert.equal(res.body.status, "error");
-
         assert.exists(res.body.errors);
+        assert.equal(res.body.errors.length, 2);
+        assert.equal(res.body.errors[0].name, "firstValue");
+        assert.equal(res.body.errors[0].message, "The value isn't a number");
+        assert.equal(res.body.errors[1].name, "secondValue");
+        assert.equal(res.body.errors[1].message, "The value isn't a number");
 
+        done();
+      });
+  });
+
+  it("it shoud return status code 400 if we send the second value equal zero", done => {
+    request(app)
+      .post(URL)
+      .set("Accept", "application/json")
+      .send({ firstValue: 1, secondValue: 0 })
+      .expect(400)
+      .end((err, res) => {
+        if (err) done(err);
+        assert.exists(res.body);
+        assert.equal(res.body.status, "error");
+        assert.exists(res.body.errors);
+        assert.equal(res.body.errors.length, 1);
+        assert.equal(res.body.errors[0].name, "secondValue");
+        assert.equal(res.body.errors[0].message, "Second number must not be zero");
         done();
       });
   });
