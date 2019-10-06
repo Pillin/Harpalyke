@@ -7,7 +7,7 @@
     "start": "node server.js",
     "debug": "node --inspect-brk server.js",
     "pretest": "./node_modules/.bin/eslint --ignore-path .gitignore . --fix",
-    "test": "NODE_ENV=test mocha --timeout 10000 test/**/*.js"
+    "test": "NODE_ENV=test mocha --timeout 10000 --exit test/**/*.js"
   },
   "author": "Pillippa Perez",
   "license": "ISC",
